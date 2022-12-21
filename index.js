@@ -1,6 +1,17 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql2');
-const cTable = require('console.table');
+require('dotenv').config();
+const fetch = require('node-fetch');
+const cTable = require('console.table')
+
+const getEmployees = () => fetch('http://localhost:3301/api/employees', {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+}).then(async x => {
+    let result = await x.json();
+    console.table(result);
+});
 
 const questions = [
     {
@@ -28,7 +39,7 @@ function init() {
         .then((answers) => {
             switch (answers.tracker) {
                 case "View All Departments":
-                    
+
                     init();
                     return;
                 case "View All Roles":
@@ -36,7 +47,7 @@ function init() {
                     init();
                     return;
                 case "View All Employees":
-                    
+                    getEmployees();
                     init();
                     return;
                 case "Add Department":
