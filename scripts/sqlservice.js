@@ -22,6 +22,18 @@ const db = mysql.createConnection(
   console.log(`Connected to the database.`)
 );
 
+app.get('/api/departments', (req, res) => {
+  db.query('SELECT * FROM department', function (err, results) {
+    res.json(results);
+    });
+})
+
+app.get('/api/roles', (req, res) => {
+  db.query('SELECT * FROM role', function (err, results) {
+    res.json(results);
+    });
+})
+
 app.get('/api/employees', (req, res) => {
   db.query('SELECT * FROM employee', function (err, results) {
     res.json(results);

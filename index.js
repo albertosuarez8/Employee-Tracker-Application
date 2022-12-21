@@ -3,6 +3,28 @@ require('dotenv').config();
 const fetch = require('node-fetch');
 const cTable = require('console.table')
 
+const getDepartments = () => fetch('http://localhost:3301/api/departments', {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+}).then(async x => {
+    let result = await x.json();
+    console.table(result);
+    init();
+});
+
+const getRoles = () => fetch('http://localhost:3301/api/roles', {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+}).then(async x => {
+    let result = await x.json();
+    console.table(result);
+    init();
+});
+
 const getEmployees = () => fetch('http://localhost:3301/api/employees', {
     method: 'GET',
     headers: {
@@ -11,6 +33,7 @@ const getEmployees = () => fetch('http://localhost:3301/api/employees', {
 }).then(async x => {
     let result = await x.json();
     console.table(result);
+    init();
 });
 
 const questions = [
@@ -39,32 +62,21 @@ function init() {
         .then((answers) => {
             switch (answers.tracker) {
                 case "View All Departments":
-
-                    init();
+                    getDepartments();
                     return;
                 case "View All Roles":
-                    
-                    init();
+                    getRoles();
                     return;
                 case "View All Employees":
                     getEmployees();
-                    init();
                     return;
                 case "Add Department":
-                    
-                    init();
                     return;
                 case "Add Role":
-
-                    init();
                     return;
                 case "Add Employee":
-                    
-                    init();
                     return;
                 case "Update Employee Role":
-                    
-                    init();
                     return;
                 default:
                     return;
