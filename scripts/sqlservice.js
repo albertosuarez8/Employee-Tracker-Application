@@ -28,10 +28,25 @@ app.get('/api/departments', (req, res) => {
     });
 })
 
+app.post('/api/departments', (req, res) => {
+  db.query(`INSERT INTO department (name)
+    VALUES ("${req.body.name}")`, function (err, results) {
+    res.json(results);
+    });
+})
+
 app.get('/api/roles', (req, res) => {
   db.query(`SELECT role.id, role.title, department.name, role.salary
   FROM role 
-  JOIN department ON role.department_id = department.id`, function (err, results) {
+  JOIN department ON role.department_id = department.id
+  ORDER BY role.id ASC`, function (err, results) {
+    res.json(results);
+    });
+})
+
+app.post('/api/roles', (req, res) => {
+  db.query(`INSERT INTO role (title, salary, department_id)
+    VALUES ("${req.body.roleName}", ${req.body.roleSalary}, ${req.body.depId})`, function (err, results) {
     res.json(results);
     });
 })
@@ -41,7 +56,7 @@ app.get('/api/employees', (req, res) => {
   FROM employee 
   JOIN role ON employee.role_id = role.id 
   JOIN department ON role.department_id = department.id
-  ORDER BY employee.id ASC;`, function (err, results) {
+  ORDER BY employee.id ASC`, function (err, results) {
     res.json(results);
     });
 })
