@@ -52,11 +52,17 @@ app.post('/api/roles', (req, res) => {
 })
 
 app.get('/api/employees', (req, res) => {
-  db.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id 
-  FROM employee 
-  JOIN role ON employee.role_id = role.id 
-  JOIN department ON role.department_id = department.id
-  ORDER BY employee.id ASC`, function (err, results) {
+  db.query(`SELECT e.id, e.first_name, e.last_name, role.title, department.name, role.salary, CONCAT(m.first_name, ' ', m.last_name) AS 'Manager' 
+  from employee e JOIN role on e.role_id = role.id JOIN department on role.department_id = department.id LEFT JOIN employee m on e.manager_id = m.id ORDER BY e.id ASC`, function (err, results) {
+    console.log(results);
+    res.json(results);
+    });
+})
+
+app.post('/api/employees', (req, res) => {
+  console.log(req.body)
+  db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+    VALUES ("${req.body.employeeFirstName}", "${req.body.employeeLastName}", ${req.body.roleId}, ${req.body.managerId})`, function (err, results) {
     res.json(results);
     });
 })
