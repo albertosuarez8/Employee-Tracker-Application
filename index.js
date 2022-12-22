@@ -36,6 +36,10 @@ const getEmployees = () => fetch('http://localhost:3301/api/employees', {
     init();
 });
 
+// function addDepartment() {
+//     inquirer
+// }
+
 const questions = [
     {
         type: 'list',

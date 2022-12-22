@@ -29,13 +29,19 @@ app.get('/api/departments', (req, res) => {
 })
 
 app.get('/api/roles', (req, res) => {
-  db.query('SELECT * FROM role', function (err, results) {
+  db.query(`SELECT role.id, role.title, department.name, role.salary
+  FROM role 
+  JOIN department ON role.department_id = department.id`, function (err, results) {
     res.json(results);
     });
 })
 
 app.get('/api/employees', (req, res) => {
-  db.query('SELECT * FROM employee', function (err, results) {
+  db.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id 
+  FROM employee 
+  JOIN role ON employee.role_id = role.id 
+  JOIN department ON role.department_id = department.id
+  ORDER BY employee.id ASC;`, function (err, results) {
     res.json(results);
     });
 })
