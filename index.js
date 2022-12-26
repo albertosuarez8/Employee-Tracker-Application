@@ -176,6 +176,47 @@ function addEmployee() {
         });
 }
 
+function updateEmployeeRole() {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'employee',
+                message: 'Which employee\'s role do you want to update?',
+                choices: getEmployeesForList,
+                default: "None",
+                loop: true
+            },
+            {
+                type: 'list',
+                name: 'role',
+                message: 'What is the employee\'s role?',
+                choices: getRolesForList,
+                default: "None",
+                loop: true
+            }
+        ])
+        .then((answers) => {
+            fetch('http://localhost:3301/api/employees', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ employee: answers.employee, role: answers.role })
+            }).then(async x => {
+                init();
+            });
+        })
+        .catch((error) => {
+            if (error.isTtyError) {
+                console.log("Could not be rendered in current environment")
+            } else {
+                console.log("Something went horribly wrong")
+                console.log(error)
+            }
+        });
+}
+
 const questions = [
     {
         type: 'list',
@@ -232,6 +273,7 @@ function init() {
                     addEmployee();
                     return;
                 case "Update Employee Role":
+                    updateEmployeeRole();
                     return;
                 default:
                     return;
